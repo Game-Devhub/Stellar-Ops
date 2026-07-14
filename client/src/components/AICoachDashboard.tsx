@@ -1,5 +1,6 @@
 import React from 'react';
 import { Brain } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
@@ -49,9 +50,14 @@ export const AICoachDashboard: React.FC = () => {
             <p style={{ marginTop: '1.5rem', lineHeight: '1.6' }}>
               <strong>Next Step:</strong> Spend 10 minutes in the firing range aiming at strafing targets before your next Ranked Arena match.
             </p>
-            <button className="primary-action-btn">
+            <motion.button 
+              className="primary-action-btn"
+              whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(139, 92, 246, 0.6)' }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => alert("Training Routine Initiated! Sending coordinates to Sector B...")}
+            >
               Start Training Routine
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ const io = new Server(server, {
   }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 const gameState = new GameState();
 
 app.use(cors());
@@ -61,6 +61,10 @@ io.on('connection', (socket) => {
     gameState.handlePlayerInput(socket.id, input);
   });
 
+  socket.on('chatMessage', (msg: { user: string; text: string }) => {
+    io.emit('chatMessage', msg);
+  });
+
   socket.on('disconnect', () => {
     console.log('Player disconnected:', socket.id);
     gameState.removePlayer(socket.id);
@@ -68,8 +72,14 @@ io.on('connection', (socket) => {
 });
 
 // Tick game state at 60fps
+let tickCount = 0;
 setInterval(() => {
+  gameState.update();
   io.emit('gameStateUpdate', gameState.getState());
+  tickCount++;
+  if (tickCount % 300 === 0) { // Log every 5 seconds
+    console.log('Current Game State:', Object.keys(gameState.getState().players).length, 'players');
+  }
 }, 1000 / 60);
 
 server.listen(PORT, () => {
